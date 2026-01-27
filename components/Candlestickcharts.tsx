@@ -14,7 +14,7 @@ const Candlestickcharts = ({data, coinId, children, height=360,
     const chartRef = useRef<IChartApi | null>(null);
     const candleSeriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null);
 
-    const [loading, setLoading] = useState(false);
+
     const [period, setPeriod] = useState(initialPeriod);
     const [ohlcData, setOhlcData] = useState<OHLCData[]>(data ?? []);
     const [isPending, startTransition] = useTransition();
@@ -44,13 +44,13 @@ const Candlestickcharts = ({data, coinId, children, height=360,
     };
 
     useEffect(() => {
-        const conatainer = chartContainerRef.current;
-        if(!conatainer) return;
+        const container = chartContainerRef.current;
+        if(!container) return;
 
         const showTime = ['daily', 'weekly', 'monthly'].includes(period);
 
-        const chart = createChart(conatainer,{...getChartConfig(height, showTime),
-            width: conatainer.clientWidth,
+        const chart = createChart(container,{...getChartConfig(height, showTime),
+            width: container.clientWidth,
         });
         const series = chart.addSeries(CandlestickSeries, getCandlestickConfig());
 
@@ -64,7 +64,7 @@ const Candlestickcharts = ({data, coinId, children, height=360,
             if(!entries.length) return;
             chart.applyOptions({width:entries[0].contentRect.width});
         });
-        observer.observe(conatainer);
+        observer.observe(container);
 
         return () => {
             observer.disconnect();
@@ -72,18 +72,7 @@ const Candlestickcharts = ({data, coinId, children, height=360,
             chartRef.current = null;
             candleSeriesRef.current = null;
         }
-    }, [height]);
-    useEffect(() => {
-        if(!candleSeriesRef.current) return;
-
-        const convertOHLCDataToSeconds = ohlcData.map( 
-            (item) => [Math.floor(item[0] / 1000), item[1], item[2], item[3], item[4]] as OHLCData,
-        );
-
-        const converted = convertOHLCData(convertOHLCDataToSeconds);
-        candleSeriesRef.current.setData(converted);
-        chartRef.current?.timeScale().fitContent();
-    },[ohlcData, period]);
+    }, [height, period, ohlcData]);
     
 
   return (
@@ -94,7 +83,7 @@ const Candlestickcharts = ({data, coinId, children, height=360,
             <div className="button-group">
                 <span className="text-sm mx-2 font-medium text-purple-100/50">period</span>
                 {PERIOD_BUTTONS.map(({value, label}) => (
-                    <button key={value} className={period === value ? 'config-button-active': 'config-button'} onClick={() => handlePeriodChange(value)} disabled={loading}>{label}</button>
+                    <button key={value} className={period === value ? 'config-button-active': 'config-button'} onClick={() => handlePeriodChange(value)} disabled={isPending}>{label}</button>
                 ))}
             </div>
         </div>
