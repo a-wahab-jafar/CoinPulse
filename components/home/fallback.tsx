@@ -64,3 +64,61 @@ export const TrendingcoinFallback = () => {
     </div>
   )
 }
+
+export const CategoriesFallback = () => {
+  const skeletonColumns: DataTableColumn<Category>[] = [
+    {
+      header: 'Category',
+      cellClassName: 'category-cell',
+      cell: () => <div className='category-skeleton bg-dark-500 rounded animate-pulse' />,
+    },
+    {
+      header: 'Top Gainers',
+      cellClassName: 'top-gainers-cell',
+      cell: () => (
+        <div className='flex gap-2'>
+          {Array.from({ length: 3 }).map((_, index) => (
+            <div key={index} className='coin-skeleton bg-dark-500 rounded-full animate-pulse' />
+          ))}
+        </div>
+      ),
+    },
+    {
+      header: '24h Change',
+      cellClassName: 'change-header-cell',
+      cell: () => (
+        <div className='change-cell gap-2 items-center'>
+          <div className='change-icon bg-dark-500 animate-pulse' />
+          <div className='value-skeleton-sm bg-dark-500 rounded animate-pulse' />
+        </div>
+      ),
+    },
+    {
+      header: 'Market Cap',
+      cellClassName: 'market-cap-cell',
+      cell: () => <div className='value-skeleton-lg bg-dark-500 rounded animate-pulse' />,
+    },
+    {
+      header: '24h Volume',
+      cellClassName: 'volume-cell',
+      cell: () => <div className='value-skeleton-md bg-dark-500 rounded animate-pulse' />,
+    },
+  ]
+
+  const skeletonData = Array(8).fill(null)
+
+  return (
+    <div id='categories-fallback'>
+      <h4>Top Categories</h4>
+
+      <Datatable
+        data={skeletonData}
+        columns={skeletonColumns}
+        rowKey={(_, index) => index}
+        tableClassName='mt-3'
+        headerCellClassName='py-3!'
+        bodyCellClassName='py-3'
+      />
+    </div>
+  )
+}
