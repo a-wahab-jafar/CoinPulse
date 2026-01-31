@@ -16,7 +16,7 @@ const LiveDataWrapper = ({ children, coinId, poolId, coin, coinOHLCData }: LiveD
     {
       header: 'Price',
       cellClassName: 'price-cell',
-      cell: (trade) => (trade.price ? formatCurrency(trade.price) : '-'),
+      cell: (trade) => (trade.price != null ? formatCurrency(trade.price) : '-'),
     },
     {
       header: 'Amount',
@@ -26,7 +26,7 @@ const LiveDataWrapper = ({ children, coinId, poolId, coin, coinOHLCData }: LiveD
     {
       header: 'Value',
       cellClassName: 'value-cell',
-      cell: (trade) => (trade.value ? formatCurrency(trade.value) : '-'),
+      cell: (trade) => (trade.value != null ? formatCurrency(trade.value) : '-'),
     },
     {
       header: 'Buy/Sell',
@@ -40,7 +40,7 @@ const LiveDataWrapper = ({ children, coinId, poolId, coin, coinOHLCData }: LiveD
     {
       header: 'Time',
       cellClassName: 'time-cell',
-      cell: (trade) => (trade.timestamp ? timeAgo(trade.timestamp) : '-'),
+      cell: (trade) => (trade.timestamp != null ? timeAgo(trade.timestamp) : '-'),
     },
   ];
 

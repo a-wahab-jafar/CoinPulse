@@ -23,7 +23,13 @@ export const useCoinGeckoWebSocket = ({
                 ws.send(JSON.stringify(payload));
 
             const handleMessage = (event: MessageEvent) => {
-                const msg: WebSocketMessage = JSON.parse(event.data);
+                let msg: WebSocketMessage;
+                try {
+                    msg = JSON.parse(event.data);
+                } catch (error) {
+                    console.warn('Failed to parse WebSocket message:', error);
+                    return;
+                }
                 console.log('WebSocket message received:', msg);
 
                 if (msg.type === 'ping') {
@@ -34,9 +40,17 @@ export const useCoinGeckoWebSocket = ({
             
 
                 if (msg.type === 'confirm_subscription') {
-                    const { channel} = JSON.parse(msg ?.identifier ?? '');
-                    subscribed.current.add(channel);
-                    console.log('Subscription confirmed for channel:', channel);
+                    if (msg.identifier && typeof msg.identifier === 'string' && msg.identifier.trim()) {
+                        try {
+                            const { channel} = JSON.parse(msg.identifier);
+                            subscribed.current.add(channel);
+                            console.log('Subscription confirmed for channel:', channel);
+                        } catch (error) {
+                            console.warn('Failed to parse subscription identifier:', error);
+                        }
+                    } else {
+                        console.warn('Invalid or missing subscription identifier');
+                    }
                 }
                 if (msg.c === "C1") {
                     setPrice({

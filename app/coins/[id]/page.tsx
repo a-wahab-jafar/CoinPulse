@@ -13,7 +13,7 @@ const page = async ({ params }: NextPageProps) => {
     fetcher<CoinDetailsData>(`/coins/${id}`, {
       dex_pair_format: 'contract_address',
     }),
-    fetcher<OHLCData>(`/coins/${id}/ohlc`, {
+    fetcher<OHLCData[]>(`/coins/${id}/ohlc`, {
       vs_currency: 'usd',
       days: 1,
       precision: 'full',
@@ -23,7 +23,7 @@ const page = async ({ params }: NextPageProps) => {
   const platform = coinData.asset_platform_id
     ? coinData.detail_platforms?.[coinData.asset_platform_id]
     : null;
-  const network = platform?.geckoterminal_url.split('/')[3] || null;
+  const network = platform?.geckoterminal_url?.split('/')[3] || null;
   const contractAddress = platform?.contract_address || null;
 
   const pool = await getPools(id, network, contractAddress);
