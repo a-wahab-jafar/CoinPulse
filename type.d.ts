@@ -166,6 +166,7 @@ interface WebSocketMessage {
   o?: number;
   h?: number;
   l?: number;
+  cl?: number;
   t?: number;
   to?: number;
   ty?: string;

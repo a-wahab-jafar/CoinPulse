@@ -83,7 +83,7 @@ export const useCoinGeckoWebSocket = ({
                        Number(msg.o ?? 0),
                        Number(msg.h ?? 0),
                        Number(msg.l ?? 0),
-                       Number(msg.c ?? 0),
+                       Number(msg.cl ?? 0),
                     ];
 
                 setOhlcv(candle);
